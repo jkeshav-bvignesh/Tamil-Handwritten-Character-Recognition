@@ -9,12 +9,12 @@ from PIL import Image
 basewidth = 150
 sess = tf.Session()
 
-with tf.gfile.FastGFile("project/retrained_graph.pb", 'rb') as f:
+with tf.gfile.FastGFile(PATH_TO_MODEL_HERE, 'rb') as f:
     graph_def = tf.GraphDef()
     graph_def.ParseFromString(f.read())
     _ = tf.import_graph_def(graph_def, name='')
 
-label_lines = [line.rstrip() for line in tf.gfile.GFile("project/retrained_labels.txt")]
+label_lines = [line.rstrip() for line in tf.gfile.GFile(PATH_TO_LABELS_HERE)]
 softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
 
 def getresults(image_data):
@@ -69,7 +69,7 @@ def data_page():
 
 @app.route('/classify', methods=['GET','POST'])
 def classify():
-    image_path = 'C:\\Users\\HI\\Desktop\\college\\sem 6\\canvas\\THCR\\imagenew.jpg'
+    image_path = 'PATH_TO_SAVE_IMAGE/imagenew.jpg'
     image_data = tf.gfile.FastGFile(image_path, 'rb').read()
     result = getresults(image_data)
     return result
